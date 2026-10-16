@@ -14,6 +14,9 @@
     --text:#2d2d2d;
     --text-light:#666;
     --border:#e8e0ec;
+    --green:#4caf50;
+    --orange:#ff9800;
+    --red:#f44336;
     --shadow:0 2px 12px rgba(233,30,99,0.08);
   }
   *{box-sizing:border-box;margin:0;padding:0}
@@ -174,6 +177,23 @@
   button.calc:active{transform:translateY(0)}
   button.calc:disabled{opacity:0.7;cursor:wait;transform:none}
 
+  /* --- YENİ: Yeniden sorgulama butonu --- */
+  button.reset{
+    width:100%;
+    padding:14px;
+    background:#fff;
+    border:2px solid var(--pink);
+    border-radius:12px;
+    color:var(--pink);
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    margin-top:12px;
+    transition:all .2s;
+  }
+  button.reset:hover{background:var(--pink-light);transform:translateY(-2px)}
+  button.reset:active{transform:translateY(0)}
+
   .results{display:none;margin-top:22px}
   .results.active{display:block;animation:fadeIn .45s ease}
   @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
@@ -271,6 +291,24 @@
     transition:width .7s ease;
   }
 
+  /* --- YENİ: Sistem yöneticisi bilgi kutusu --- */
+  .manager-note{
+    font-size:13px;
+    color:#7b1fa2;
+    line-height:1.7;
+    margin-top:16px;
+    padding:14px 16px;
+    background:#f3e5f5;
+    border-left:4px solid var(--purple);
+    border-radius:0 10px 10px 0;
+    text-align:center;
+    font-weight:600;
+  }
+  .manager-note::before{
+    content:"ℹ️ ";
+    font-size:16px;
+  }
+
   .note{
     font-size:12.5px;
     color:#5d4037;
@@ -351,11 +389,12 @@
 
   <div class="intro-help">
     <strong>📖 Bu araç ne işe yarar?</strong>
-    <p style="margin-top:8px">Reklam vermek isteyen bir güzellik salonu sahibisiniz. Bu araç size şunu söyler: <strong>"Ayda şu kadar müşteri istiyorsan, yaklaşık şu kadar para harcaman gerekir."</strong></p>
+    <p style="margin-top:8px">Reklam vermek isteyen bir güzellik salonu sahibisiniz. Bu araç size şunu söyler: <strong>"Ayda şu kadar müşteri istiyorsan, yaklaşık şu kadar reklam harcaman gerekir."</strong></p>
     <ol>
       <li>Aşağıdaki soruları doldurun (bilmiyorsanız önerilen değerleri bırakın)</li>
       <li>"Ortalama Fiyatı Hesapla" butonuna basın</li>
-      <li>Sonuçları görün: reklam bütçesi, ajans ücreti, beklenen müşteri sayısı ve ciro</li>
+      <li>Sonuçları görün: reklam bütçesi, beklenen müşteri sayısı ve ciro</li>
+      <li>Yeni bir sorgulama için "🔄 Yeni Sorgulama Yap" butonuna basın</li>
     </ol>
     <div class="rate-info" id="rateInfo">💱 Dolar kuru yükleniyor...</div>
   </div>
@@ -420,21 +459,11 @@
   </div>
 
   <div class="card">
-    <h2><span class="icon">🏢</span> 3. Ajans / Yönetim Modeli</h2>
-    <div class="form-grid">
-      <div class="field">
-        <label>Ajans Ücret Modeli</label>
-        <select id="agencyModel">
-          <option value="fixed" selected>Sabit Yönetim Ücreti</option>
-          <option value="perf">Sabit + Performans Payı (%7)</option>
-        </select>
-        <span class="hint">Bursa'daki yerel ajanslar genellikle 200-800 $ sabit ücret + satıştan %4-11 performans payı alır.</span>
-      </div>
-      <div class="field">
-        <label>💰 Ortalama hizmet bedeliniz (TL/seans)</label>
-        <input type="number" id="ticket" value="800" min="100" step="50" />
-        <span class="hint">Bir müşterinin salonda ortalama ne kadar harcadığı. Ciro tahmini için kullanılır.</span>
-      </div>
+    <h2><span class="icon">💰</span> 3. Ortalama Hizmet Bedeli</h2>
+    <div class="field">
+      <label>Bir müşteri ortalama ne kadar harcıyor? (TL/seans)</label>
+      <input type="number" id="ticket" value="800" min="100" step="50" />
+      <span class="hint">Bir müşterinin salonda ortalama ne kadar harcadığı. Ciro tahmini için kullanılır.</span>
     </div>
   </div>
 
@@ -453,9 +482,14 @@
     </div>
 
     <div class="card">
-      <h2><span class="icon">💸</span> Bütçe Nereye Gidiyor?</h2>
+      <h2><span class="icon">💸</span> Reklam Bütçesi Dağılımı</h2>
       <div class="table-wrap">
         <table id="budgetTable"></table>
+      </div>
+
+      <!-- YENİ: Sistem yöneticisi ücreti notu -->
+      <div class="manager-note">
+        Bölgeye sistem yöneticisi ücreti dahil değildir.
       </div>
     </div>
 
@@ -480,6 +514,9 @@
         <dd>Reklamı görüp sizinle iletişime geçen, henüz satın almamış kişi.</dd>
       </dl>
     </div>
+
+    <!-- YENİ: Yeniden sorgulama butonu -->
+    <button class="reset" onclick="resetForm()">🔄 Yeni Sorgulama Yap</button>
   </div>
 
   <footer>
@@ -508,25 +545,20 @@ const DATA = {
   },
   regionMultiplier: { merkez: 1.10, cevre: 0.88 },
   seasonMultiplier: { normal: 1.0, peak: 1.30 },
-  agency: {
-    fixedUSD: { low: 250, avg: 400, high: 650 },
-    perfRate: 0.07
-  },
   split: { meta: 0.65, google: 0.35 }
 };
 
-// ============================================================
-// DÖVİZ KURU — exchangerate-api (ücretsiz, JSON, CORS destekli)
-// Sayfa yüklendiğinde çekilir, butona basıldığında kullanılır
-// ============================================================
+/* ============================================================
+   DÖVİZ KURU
+   ============================================================ */
 
-let USD_TRY = 42; // Yedek değer (kur çekilemezse)
-let rateStatus = 'loading'; // loading | ok | fallback
+let USD_TRY = 42;
+let rateStatus = 'loading';
 
 async function fetchUsdRate() {
   try {
     const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 5000); // 5 sn timeout
+    const timeout = setTimeout(() => controller.abort(), 5000);
 
     const response = await fetch('https://api.exchangerate-api.com/v4/latest/USD', {
       signal: controller.signal
@@ -559,18 +591,17 @@ function updateRateInfo() {
   if (rateStatus === 'ok') {
     el.innerHTML = `💱 <span class="ok">Güncel Dolar Kuru: ${USD_TRY.toFixed(2)} ₺</span> (otomatik olarak güncellendi)`;
   } else if (rateStatus === 'fallback') {
-    el.innerHTML = `💱 <span class="warn">Dolar kuru çekilemedi. Yedek değer: ${USD_TRY.toFixed(2)} ₺</span> (internet bağlantınızı kontrol edin)`;
+    el.innerHTML = `💱 <span class="warn">Dolar kuru çekilemedi. Yedek değer: ${USD_TRY.toFixed(2)} ₺</span>`;
   } else {
     el.innerHTML = `💱 Dolar kuru yükleniyor...`;
   }
 }
 
-// Sayfa yüklendiğinde kuru çek
 fetchUsdRate();
 
-// ============================================================
-// HESAPLAMA
-// ============================================================
+/* ============================================================
+   HESAPLAMA — SADECE REKLAM GİDERİ
+   ============================================================ */
 
 let lastResult = null;
 let currentScenario = 'avg';
@@ -578,7 +609,6 @@ let currentScenario = 'avg';
 async function calculate() {
   const btn = document.getElementById('calcBtn');
 
-  // Eğer kur henüz yüklenmediyse tekrar dene
   if (rateStatus === 'loading') {
     btn.disabled = true;
     btn.textContent = '⏳ Kur çekiliyor...';
@@ -593,7 +623,6 @@ async function calculate() {
   const leads   = Math.max(5, parseInt(document.getElementById('leads').value) || 20);
   const useMeta = document.getElementById('meta').checked;
   const useGoogle = document.getElementById('google').checked;
-  const agencyModel = document.getElementById('agencyModel').value;
   const ticket = Math.max(100, parseInt(document.getElementById('ticket').value) || 800);
 
   if (!useMeta && !useGoogle) {
@@ -628,17 +657,9 @@ async function calculate() {
       googleBudget = googleCPL * googleLeads;
     }
 
+    // SADECE REKLAM GİDERİ
     const adSpend = metaBudget + googleBudget;
     const revenue = leads * ticket;
-
-    let agencyTRY = DATA.agency.fixedUSD[sc] * USD_TRY;
-    let perfFee = 0;
-
-    if (agencyModel === 'perf') {
-      perfFee = revenue * DATA.agency.perfRate;
-    }
-
-    const total = adSpend + agencyTRY + perfFee;
     const roas = adSpend > 0 ? (revenue / adSpend).toFixed(2) : '0.00';
 
     scenarios[sc] = {
@@ -648,16 +669,14 @@ async function calculate() {
       metaBudget: Math.round(metaBudget),
       googleBudget: Math.round(googleBudget),
       adSpend: Math.round(adSpend),
-      agencyTRY: Math.round(agencyTRY),
-      perfFee: Math.round(perfFee),
-      total: Math.round(total),
+      total: Math.round(adSpend), // Toplam = sadece reklam gideri
       revenue: Math.round(revenue),
       roas,
       cplBlended: leads > 0 ? Math.round(adSpend / leads) : 0
     };
   });
 
-  lastResult = { scenarios, leads, ticket, useMeta, useGoogle, agencyModel, service, region, season };
+  lastResult = { scenarios, leads, ticket, useMeta, useGoogle, service, region, season };
   currentScenario = 'avg';
   render();
   document.getElementById('results').classList.add('active');
@@ -675,13 +694,13 @@ function switchScenario(sc, btn) {
 function render() {
   if (!lastResult) return;
   const s = lastResult.scenarios[currentScenario];
-  const { leads, ticket, useMeta, useGoogle, agencyModel } = lastResult;
+  const { leads, ticket, useMeta, useGoogle } = lastResult;
 
   const fmt = n => n.toLocaleString('tr-TR') + ' ₺';
 
+  // KPI kartları — sadece reklam gideri
   const kpis = [
-    { label: 'Aylık Toplam Maliyet', value: fmt(s.total), sub: 'reklam + ajans' },
-    { label: 'Reklam Bütçesi', value: fmt(s.adSpend), sub: 'sadece medya harcaması' },
+    { label: 'Aylık Reklam Bütçesi', value: fmt(s.adSpend), sub: 'toplam harcama' },
     { label: 'Ortalama CPL', value: fmt(s.cplBlended), sub: 'müşteri başına maliyet' },
     { label: 'Tahmini Ciro', value: fmt(s.revenue), sub: leads + ' müşteri × ' + fmt(ticket) },
     { label: 'ROAS', value: s.roas + 'x', sub: 'reklam getirisi' }
@@ -695,6 +714,7 @@ function render() {
     </div>
   `).join('');
 
+  // Bütçe tablosu — sadece reklam kalemleri
   const rows = [];
   if (useMeta) {
     rows.push({
@@ -710,16 +730,10 @@ function render() {
       pct: s.total
     });
   }
-  const agencyTotal = s.agencyTRY + s.perfFee;
-  rows.push({
-    name: `🏢 Ajans Ücreti (${agencyModel === 'perf' ? 'sabit + %7 performans' : 'sabit'})`,
-    val: agencyTotal,
-    pct: s.total
-  });
 
   document.getElementById('budgetTable').innerHTML = `
     <thead>
-      <tr><th>Harcama Kalemi</th><th style="text-align:right">Tutar</th><th style="text-align:right">Pay</th></tr>
+      <tr><th>Reklam Kanalı</th><th style="text-align:right">Tutar</th><th style="text-align:right">Pay</th></tr>
     </thead>
     <tbody>
       ${rows.map(r => `
@@ -733,17 +747,17 @@ function render() {
         </tr>
       `).join('')}
       <tr class="total-row">
-        <td>TOPLAM AYLIK MALİYET</td>
+        <td>TOPLAM REKLAM GİDERİ</td>
         <td class="num">${fmt(s.total)}</td>
         <td class="num">100%</td>
       </tr>
     </tbody>
   `;
 
+  // Performans tablosu
   const perfRows = [
     ['Hedeflenen yeni müşteri', leads, ''],
     ['Ortalama CPL (blended)', s.cplBlended, 'reklam maliyeti / müşteri'],
-    ['Müşteri başına toplam maliyet', Math.round(s.total / leads), 'reklam + ajans'],
     ['Tahmini ciro', s.revenue, leads + ' × ' + fmt(ticket)],
     ['ROAS (Reklam Getirisi)', s.roas + 'x', '1 TL harca → ' + s.roas + ' TL kazan']
   ];
@@ -782,6 +796,45 @@ function render() {
     <strong>💡 Önemli Not:</strong> Google Ads tarafında "estetik" ve "güzellik" anahtar kelimeleri mevzuat nedeniyle kısıtlı olabilir. İlk 2 hafta <strong>1.500–2.000 TL test bütçesi</strong> ayırıp gerçek CPC/CPL verisini ölçmeniz önerilir. Fatura tahmininde kullanılan dolar kuru: <strong>${USD_TRY.toFixed(2)} ₺</strong>${rateStatus === 'fallback' ? ' (yedek değer)' : ''}.
   `;
 }
+
+/* ============================================================
+   YENİ SORGU İÇİN FORMU SIFIRLA (sayfa yenilemeden)
+   ============================================================ */
+
+function resetForm() {
+  // Form alanlarını varsayılan değerlere döndür
+  document.getElementById('service').value = 'mid';
+  document.getElementById('region').value = 'merkez';
+  document.getElementById('season').value = 'normal';
+  document.getElementById('leads').value = 20;
+  document.getElementById('ticket').value = 800;
+  document.getElementById('meta').checked = true;
+  document.getElementById('google').checked = true;
+
+  // Checkbox görsel durumunu güncelle
+  document.querySelectorAll('.checkbox-row').forEach(row => {
+    const cb = row.querySelector('input[type="checkbox"]');
+    row.classList.toggle('checked', cb.checked);
+  });
+
+  // Sonuçları gizle
+  document.getElementById('results').classList.remove('active');
+  document.getElementById('fabTop').classList.remove('show');
+  lastResult = null;
+  currentScenario = 'avg';
+
+  // Senaryo tablarını sıfırla
+  document.querySelectorAll('.scenario-tabs button').forEach(b => b.classList.remove('active'));
+  const avgBtn = document.querySelector('.scenario-tabs button:nth-child(2)');
+  if (avgBtn) avgBtn.classList.add('active');
+
+  // Sayfa başına yumuşak kaydır
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============================================================
+   CHECKBOX GÖRSEL GERİ BİLDİRİM
+   ============================================================ */
 
 document.querySelectorAll('.checkbox-row').forEach(row => {
   const cb = row.querySelector('input[type="checkbox"]');
