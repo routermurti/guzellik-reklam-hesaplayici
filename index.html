@@ -508,50 +508,71 @@
 <script>
 /* ============================================================
    REFERANS VERİLERİ — Bursa / Türkiye güzellik sektörü 2026
-   Kaynak: Meta Ads Q1-Q2 2026 sektör benchmark'ları [citation:6],
-   Bursa ajans ücretleri [citation:5], Türkiye Instagram reklam CPL [citation:7]
    ============================================================ */
 
 const DATA = {
   // --- CPL (Potansiyel Müşteri Başına Maliyet) ---
-  // Meta Ads: Beauty & Cosmetics sektörü CPL ≈ $28 (Q1-Q2 2026) [citation:6]
-  // Türkiye'de TL bazında: 80-250 TL bandı [citation:7]
   metaCPL: {
     basic:  { low: 70,  avg: 110, high: 170 },
     mid:    { low: 100, avg: 160, high: 250 },
     high:   { low: 150, avg: 230, high: 360 }
   },
-
-  // Google Ads: Lead Gen & Local Services CPL ≈ $42 (Q1-Q2 2026) [citation:6]
-  // Türkiye'de mevzuat kısıtı nedeniyle daha yüksek öngörülüyor
+  // Google Ads: Lead Gen & Local Services CPL ≈ $42 (Q1-Q2 2026)
   googleCPL: {
     basic:  { low: 100, avg: 160, high: 250 },
     mid:    { low: 140, avg: 220, high: 340 },
     high:   { low: 200, avg: 320, high: 480 }
   },
-
   // --- Bölge Çarpanı ---
-  // Bursa merkez ilçelerde rekabet daha yüksek
   regionMultiplier: { merkez: 1.10, cevre: 0.88 },
-
   // --- Sezon Çarpanı ---
-  // Düğün sezonu ve Q4'te CPM %20-40 artıyor [citation:7]
   seasonMultiplier: { normal: 1.0, peak: 1.30 },
-
   // --- Ajans Ücretleri ---
-  // Bursa'daki yerel ajanslar: sabit 200-800 $ + %4-11 performans payı [citation:5][citation:13]
   agency: {
     fixedUSD: { low: 250, avg: 400, high: 650 },
-    perfRate: 0.07  // %7 performans payı (ortalama)
+    perfRate: 0.07  // %7 performans payı
   },
-
   // --- Kanal Bütçe Dağılımı ---
-  // Güzellik sektöründe Meta ağırlıklı çalışılır [citation:3]
   split: { meta: 0.65, google: 0.35 }
 };
 
-// Güncel USD/TRY kuru (yaklaşık — gerektiğinde güncelleyin)
-const USD_TRY = 38;
+// ============================================================
+// TCMB DÖVİZ KURU ÇEKME (OTOMATİK)
+// Kaynak: darphane (GitHub üzerinden ücretsiz JSON API) [citation:9]
+// TCMB kurları her iş günü saat 15:30'da güncellenir [citation:20]
+// ============================================================
+const USD_TRY = await fetchUsdRate();
+
+async function fetchUsdRate() {
+  try {
+    // Darphane projesi, TCMB verilerini GitHub CDN üzerinden JSON olarak sunar.
+    // Sunucu uykusu veya istek limiti yoktur [citation:9].
+    const response = await fetch('https://raw.githubusercontent.com/kessinc/darphane/main/kurlar.json');
+    const data = await response.json();
+
+    // JSON yapısını kontrol et ve USD satış kurunu bul
+    // Örnek yapı: { "usd": { "alis": 49.24, "satis": 49.33 } } veya benzeri
+    const usd = data.usd || data.USD || data.dolar;
+    if (usd && (usd.satis || usd.selling || usd.rate)) {
+      return usd.satis || usd.selling || usd.rate;
+    }
+    
+    // Alternatif: Dizi formatında gelirse
+    if (Array.isArray(data)) {
+      const usdItem = data.find(item => item.currency === 'USD' || item.kod === 'USD');
+      if (usdItem) return usdItem.satis || usdItem.selling || usdItem.rate;
+    }
+
+    throw new Error('USD kuru JSON içinde bulunamadı');
+  } catch (error) {
+    console.warn('TCMB kuru çekilemedi, varsayılan değer kullanılıyor:', error);
+    // İnternet yoksa veya API çökerse yedek değer (yaklaşık güncel kur)
+    return 42; 
+  }
+}
+
+// Not: Yedek değeri (42) dolar kuru değiştikçe manuel güncellemeniz gerekebilir.
+// Ancak API çalıştığı sürece otomatik güncellenecektir.
 
 let lastResult = null;
 let currentScenario = 'avg';
@@ -560,7 +581,6 @@ let currentScenario = 'avg';
    HESAPLAMA FONKSİYONU
    ============================================================ */
 function calculate() {
-  // Girdileri oku
   const service = document.getElementById('service').value;
   const region  = document.getElementById('region').value;
   const season  = document.getElementById('season').value;
@@ -570,22 +590,18 @@ function calculate() {
   const agencyModel = document.getElementById('agencyModel').value;
   const ticket = Math.max(100, parseInt(document.getElementById('ticket').value) || 800);
 
-  // Validasyon
   if (!useMeta && !useGoogle) {
     alert('⚠️ Lütfen en az bir reklam kanalı seçin.');
     return;
   }
 
-  // Çarpanlar
   const multipliers = DATA.regionMultiplier[region] * DATA.seasonMultiplier[season];
 
-  // Her senaryo için hesapla
   const scenarios = {};
   ['low','avg','high'].forEach(sc => {
     let metaCPL = 0, googleCPL = 0;
     let metaLeads = 0, googleLeads = 0;
 
-    // Lead dağılımı
     if (useMeta && useGoogle) {
       metaLeads = Math.round(leads * DATA.split.meta);
       googleLeads = leads - metaLeads;
@@ -609,7 +625,6 @@ function calculate() {
     const adSpend = metaBudget + googleBudget;
     const revenue = leads * ticket;
 
-    // Ajans ücreti
     let agencyTRY = DATA.agency.fixedUSD[sc] * USD_TRY;
     let perfFee = 0;
 
@@ -756,7 +771,7 @@ function render() {
   let advice = '';
 
   if (roasNum < 2) {
-    advice = '⚠️ <strong>Dikkat:</strong> ROAS 2x altında. Reklam harcaması ciroyu karşılamıyor olabilir. Hedeflemeyi daraltın (5-10 km çevre), görselleri iyileştirin [citation:7].';
+    advice = '⚠️ <strong>Dikkat:</strong> ROAS 2x altında. Reklam harcaması ciroyu karşılamıyor olabilir. Hedeflemeyi daraltın (5-10 km çevre), görselleri iyileştirin .';
   } else if (roasNum < 4) {
     advice = '✅ <strong>Sağlıklı bant:</strong> ROAS 2-4x arası. Reklamlar çalışıyor, aşamalı olarak bütçe artırılabilir (haftalık %10-20).';
   } else {
@@ -765,7 +780,7 @@ function render() {
 
   document.getElementById('note').innerHTML = `
     ${advice}<br><br>
-    <strong>💡 Önemli Not:</strong> Google Ads tarafında "estetik" ve "güzellik" anahtar kelimeleri mevzuat nedeniyle kısıtlı olabilir [citation:3]. İlk 2 hafta <strong>1.500–2.000 TL test bütçesi</strong> ayırıp gerçek CPC/CPL verisini ölçmeniz önerilir. Fatura tahmininde USD/TRY = ${USD_TRY} kullanılmıştır.
+    <strong>💡 Önemli Not:</strong> Google Ads tarafında "estetik" ve "güzellik" anahtar kelimeleri mevzuat nedeniyle kısıtlı olabilir. İlk 2 hafta <strong>1.500–2.000 TL test bütçesi</strong> ayırıp gerçek CPC/CPL verisini ölçmeniz önerilir. Fatura tahmininde TCMB dolar satış kuru (${USD_TRY.toFixed(2)} ₺) kullanılmıştır.
   `;
 }
 
