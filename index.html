@@ -1,335 +1,582 @@
 <!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Güzellik Salonu Reklam Fiyatlandırma Aracı | Bursa</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Güzellik Salonu Reklam Bütçe Hesaplayıcı | Bursa 2026</title>
 <style>
   :root{
-    --bg:#0f1220;
-    --card:#171a2e;
-    --card2:#1e2240;
-    --accent:#e91e63;
-    --accent2:#ff6b9d;
-    --text:#eef0ff;
-    --muted:#9aa0c0;
-    --border:#2a2f55;
-    --green:#22c55e;
-    --yellow:#eab308;
-    --red:#ef4444;
+    --bg:#f7f4f9;
+    --card:#ffffff;
+    --pink:#e91e63;
+    --pink-light:#fce4ec;
+    --purple:#9c27b0;
+    --text:#2d2d2d;
+    --text-light:#666;
+    --border:#e8e0ec;
+    --green:#4caf50;
+    --orange:#ff9800;
+    --red:#f44336;
+    --shadow:0 2px 12px rgba(233,30,99,0.08);
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
-    background:linear-gradient(180deg,#0f1220 0%,#151833 100%);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    background:var(--bg);
     color:var(--text);
-    min-height:100vh;
-    padding:24px 16px 60px;
+    line-height:1.7;
+    padding:20px 16px 80px;
   }
-  .container{max-width:960px;margin:0 auto}
-  header{text-align:center;margin-bottom:32px}
+  .container{max-width:820px;margin:0 auto}
+
+  /* ---------- HEADER ---------- */
+  header{
+    text-align:center;
+    margin-bottom:28px;
+    padding:28px 20px;
+    background:linear-gradient(135deg,#e91e63 0%,#9c27b0 100%);
+    border-radius:20px;
+    color:#fff;
+    box-shadow:0 6px 24px rgba(233,30,99,0.25);
+  }
   header h1{
-    font-size:clamp(22px,4vw,32px);
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
-    -webkit-background-clip:text;
-    background-clip:text;
-    -webkit-text-fill-color:transparent;
-    margin-bottom:8px;
+    font-size:clamp(20px,4.5vw,28px);
+    margin-bottom:10px;
+    font-weight:700;
+    letter-spacing:-0.3px;
   }
-  header p{color:var(--muted);font-size:14px}
+  header p{
+    font-size:14px;
+    opacity:0.92;
+    max-width:520px;
+    margin:0 auto;
+  }
+
+  /* ---------- INTRO HELP ---------- */
+  .intro-help{
+    background:#fff8e1;
+    border:1px solid #ffe082;
+    border-radius:14px;
+    padding:18px 20px;
+    margin-bottom:22px;
+    font-size:14px;
+    color:#5d4037;
+  }
+  .intro-help strong{color:#e65100}
+  .intro-help ol{margin:8px 0 0 20px;line-height:1.9}
+  .intro-help li{margin-bottom:2px}
+
+  /* ---------- CARDS ---------- */
   .card{
     background:var(--card);
     border:1px solid var(--border);
     border-radius:16px;
-    padding:24px;
-    margin-bottom:20px;
+    padding:22px 20px;
+    margin-bottom:18px;
+    box-shadow:var(--shadow);
   }
   .card h2{
     font-size:16px;
+    color:var(--pink);
     margin-bottom:16px;
-    color:var(--accent2);
-    text-transform:uppercase;
-    letter-spacing:0.5px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-weight:700;
   }
-  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-  @media(max-width:640px){.grid{grid-template-columns:1fr}}
-  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  .card h2 .icon{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:28px;
+    height:28px;
+    background:var(--pink-light);
+    border-radius:8px;
+    font-size:16px;
+  }
+
+  /* ---------- FORM ---------- */
+  .form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:16px;
+  }
+  @media(max-width:600px){.form-grid{grid-template-columns:1fr}}
+
+  .field{display:flex;flex-direction:column;gap:6px}
+  .field label{
+    font-size:13px;
+    color:var(--text-light);
+    font-weight:600;
+  }
+  .field .hint{
+    font-size:11px;
+    color:#999;
+    margin-top:-2px;
+  }
   select,input[type=number]{
     width:100%;
-    padding:12px 14px;
-    background:var(--card2);
-    border:1px solid var(--border);
+    padding:11px 14px;
+    background:#faf8fc;
+    border:1.5px solid var(--border);
     border-radius:10px;
     color:var(--text);
     font-size:14px;
     outline:none;
     transition:border-color .2s;
+    -webkit-appearance:none;
+    appearance:none;
   }
-  select:focus,input:focus{border-color:var(--accent)}
+  select{
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    padding-right:36px;
+  }
+  select:focus,input:focus{border-color:var(--pink);background:#fff}
+
+  /* ---------- CHECKBOX ---------- */
   .checkbox-row{
     display:flex;
     align-items:center;
-    gap:10px;
-    padding:12px 14px;
-    background:var(--card2);
-    border:1px solid var(--border);
-    border-radius:10px;
+    gap:12px;
+    padding:14px 16px;
+    background:#faf8fc;
+    border:1.5px solid var(--border);
+    border-radius:12px;
     cursor:pointer;
+    transition:all .2s;
     user-select:none;
-    transition:border-color .2s;
   }
-  .checkbox-row:hover{border-color:var(--accent)}
-  .checkbox-row input{width:18px;height:18px;accent-color:var(--accent)}
-  .checkbox-row span{font-size:14px}
+  .checkbox-row:hover{border-color:var(--pink)}
+  .checkbox-row.checked{
+    border-color:var(--pink);
+    background:var(--pink-light);
+  }
+  .checkbox-row input[type="checkbox"]{
+    width:20px;height:20px;
+    accent-color:var(--pink);
+    cursor:pointer;
+    flex-shrink:0;
+  }
+  .checkbox-row .cb-text{display:flex;flex-direction:column}
+  .checkbox-row .cb-title{font-size:14px;font-weight:600}
+  .checkbox-row .cb-desc{font-size:11px;color:#888;margin-top:2px}
+
+  /* ---------- BUTTON ---------- */
   button.calc{
     width:100%;
-    padding:16px;
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    padding:18px;
+    background:linear-gradient(135deg,#e91e63,#9c27b0);
     border:none;
-    border-radius:12px;
+    border-radius:14px;
     color:#fff;
-    font-size:16px;
-    font-weight:600;
+    font-size:17px;
+    font-weight:700;
     cursor:pointer;
-    margin-top:8px;
-    transition:transform .15s,opacity .15s;
+    margin-top:6px;
+    transition:transform .15s,box-shadow .2s;
+    box-shadow:0 4px 16px rgba(233,30,99,0.3);
+    letter-spacing:0.3px;
   }
-  button.calc:hover{transform:translateY(-2px);opacity:.95}
+  button.calc:hover{transform:translateY(-2px);box-shadow:0 6px 22px rgba(233,30,99,0.4)}
   button.calc:active{transform:translateY(0)}
-  .results{display:none;margin-top:8px}
-  .results.active{display:block;animation:fadeIn .4s ease}
-  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ---------- RESULTS ---------- */
+  .results{display:none;margin-top:22px}
+  .results.active{display:block;animation:fadeIn .45s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+  /* ---------- KPI ---------- */
   .kpi-grid{
     display:grid;
-    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-    gap:14px;
-    margin-bottom:20px;
+    grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+    gap:12px;
+    margin-bottom:18px;
   }
   .kpi{
-    background:var(--card2);
+    background:#fff;
     border:1px solid var(--border);
-    border-radius:12px;
-    padding:18px;
+    border-radius:14px;
+    padding:16px 12px;
     text-align:center;
+    box-shadow:0 1px 6px rgba(0,0,0,0.04);
   }
-  .kpi .label{font-size:12px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
-  .kpi .value{font-size:22px;font-weight:700;color:var(--accent2)}
-  .kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
-  table{width:100%;border-collapse:collapse;font-size:14px}
-  th,td{padding:12px;text-align:left;border-bottom:1px solid var(--border)}
-  th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.4px}
-  td.num{text-align:right;font-variant-numeric:tabular-nums}
-  .total-row td{font-weight:700;color:var(--accent2);border-bottom:none;font-size:15px}
-  .bar{
-    height:8px;
-    background:var(--card2);
-    border-radius:4px;
-    overflow:hidden;
-    margin-top:6px;
+  .kpi .k-label{
+    font-size:11px;
+    color:var(--text-light);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    margin-bottom:6px;
+    font-weight:600;
   }
-  .bar > div{
-    height:100%;
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
-    border-radius:4px;
-    transition:width .6s ease;
+  .kpi .k-value{
+    font-size:20px;
+    font-weight:800;
+    color:var(--pink);
+    word-break:break-all;
   }
-  .note{
-    font-size:12px;
-    color:var(--muted);
-    line-height:1.6;
-    margin-top:12px;
-    padding:12px;
-    background:rgba(233,30,99,.06);
-    border-left:3px solid var(--accent);
-    border-radius:6px;
-  }
-  footer{
-    text-align:center;
-    font-size:12px;
-    color:var(--muted);
-    margin-top:32px;
-  }
+  .kpi .k-sub{font-size:11px;color:#999;margin-top:4px}
+
+  /* ---------- SCENARIO TABS ---------- */
   .scenario-tabs{
     display:flex;
     gap:8px;
-    margin-bottom:20px;
+    margin-bottom:18px;
     flex-wrap:wrap;
   }
   .scenario-tabs button{
     flex:1;
-    min-width:120px;
-    padding:10px;
-    background:var(--card2);
-    border:1px solid var(--border);
-    color:var(--muted);
-    border-radius:10px;
+    min-width:100px;
+    padding:11px 10px;
+    background:#faf8fc;
+    border:1.5px solid var(--border);
+    border-radius:12px;
     cursor:pointer;
     font-size:13px;
+    font-weight:600;
+    color:var(--text-light);
     transition:all .2s;
   }
   .scenario-tabs button.active{
-    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    background:linear-gradient(135deg,#e91e63,#9c27b0);
     color:#fff;
     border-color:transparent;
+    box-shadow:0 3px 12px rgba(233,30,99,0.3);
   }
+  .scenario-tabs button:hover:not(.active){border-color:var(--pink);color:var(--pink)}
+
+  /* ---------- TABLE ---------- */
+  .table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:460px}
+  th,td{padding:11px 10px;text-align:left;border-bottom:1px solid var(--border)}
+  th{
+    color:var(--text-light);
+    font-weight:600;
+    font-size:11px;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+    background:#faf8fc;
+  }
+  th:first-child{border-radius:8px 0 0 0}
+  th:last-child{border-radius:0 8px 0 0}
+  td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .total-row td{
+    font-weight:800;
+    color:var(--pink);
+    border-bottom:none;
+    font-size:15px;
+    padding-top:14px;
+  }
+  .bar{
+    height:6px;
+    background:#f0e6f5;
+    border-radius:3px;
+    overflow:hidden;
+    margin-top:5px;
+    max-width:180px;
+  }
+  .bar > div{
+    height:100%;
+    background:linear-gradient(90deg,#e91e63,#9c27b0);
+    border-radius:3px;
+    transition:width .7s ease;
+  }
+
+  /* ---------- NOTE ---------- */
+  .note{
+    font-size:12.5px;
+    color:#5d4037;
+    line-height:1.8;
+    margin-top:14px;
+    padding:14px 16px;
+    background:#fff8e1;
+    border-left:3px solid #ff9800;
+    border-radius:0 8px 8px 0;
+  }
+  .note strong{color:#e65100}
+
+  /* ---------- GLOSSARY ---------- */
+  .glossary{
+    background:#f3e5f5;
+    border:1px solid #e1bee7;
+    border-radius:14px;
+    padding:18px 20px;
+    margin-top:20px;
+    font-size:13px;
+    line-height:1.9;
+  }
+  .glossary h3{
+    font-size:14px;
+    color:var(--purple);
+    margin-bottom:10px;
+    font-weight:700;
+  }
+  .glossary dt{font-weight:700;color:var(--purple);margin-top:10px}
+  .glossary dd{margin-left:0;color:#555}
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    text-align:center;
+    font-size:11.5px;
+    color:#aaa;
+    margin-top:36px;
+    padding:0 10px;
+    line-height:1.7;
+  }
+
+  /* ---------- FAB BACK ---------- */
+  .fab-top{
+    position:fixed;
+    bottom:24px;right:24px;
+    width:48px;height:48px;
+    border-radius:50%;
+    background:linear-gradient(135deg,#e91e63,#9c27b0);
+    color:#fff;border:none;
+    font-size:20px;
+    cursor:pointer;
+    box-shadow:0 4px 16px rgba(233,30,99,0.35);
+    display:none;
+    align-items:center;justify-content:center;
+    z-index:99;
+    transition:transform .2s;
+  }
+  .fab-top.show{display:flex}
+  .fab-top:hover{transform:scale(1.08)}
 </style>
 </head>
 <body>
 <div class="container">
 
+  <!-- ========== HEADER ========== -->
   <header>
-    <h1>💅 Güzellik Salonu Reklam Fiyatlandırma Aracı</h1>
-    <p>Bursa • Google Ads + Meta Ads • Ortalama bütçe ve CPL tahmini</p>
+    <h1>💅 Güzellik Salonu Reklam Bütçe Hesaplayıcı</h1>
+    <p>Bursa'daki güzellik salonları için Google Ads ve Meta Ads (Instagram/Facebook) aylık bütçe tahmini</p>
   </header>
 
+  <!-- ========== INTRO ========== -->
+  <div class="intro-help">
+    <strong>📖 Bu araç ne işe yarar?</strong>
+    <p style="margin-top:8px">Reklam vermek isteyen bir güzellik salonu sahibisiniz. Bu araç size şunu söyler: <strong>"Ayda şu kadar müşteri istiyorsan, yaklaşık şu kadar para harcaman gerekir."</strong></p>
+    <ol>
+      <li>Aşağıdaki soruları doldurun (bilmiyorsanız önerilen değerleri bırakın)</li>
+      <li>"Ortalama Fiyatı Hesapla" butonuna basın</li>
+      <li>Sonuçları görün: reklam bütçesi, ajans ücreti, beklenen müşteri sayısı ve ciro</li>
+    </ol>
+  </div>
+
+  <!-- ========== FORM ========== -->
   <div class="card">
-    <h2>1. Salon Bilgileri</h2>
-    <div class="grid">
-      <div>
-        <label>Hizmet Türü</label>
+    <h2><span class="icon">🏪</span> 1. Salonunuzu Tanıtalım</h2>
+    <div class="form-grid">
+      <div class="field">
+        <label>💇 Hangi hizmetleri veriyorsunuz?</label>
         <select id="service">
-          <option value="basic">Saç / Bakım (düşük bilet)</option>
-          <option value="mid" selected>Cilt bakımı / Lazer / Bölgesel</option>
-          <option value="high">Gelin paketi / Medikal estetik</option>
+          <option value="basic">Saç kesimi / bakım / boya (düşük fiyatlı)</option>
+          <option value="mid" selected>Cilt bakımı / lazer / bölgesel zayıflama (orta fiyatlı)</option>
+          <option value="high">Gelin paketi / medikal estetik (yüksek fiyatlı)</option>
         </select>
+        <span class="hint">Fiyat ne kadar yüksekse, reklamla müşteri bulmak o kadar pahalıdır.</span>
       </div>
-      <div>
-        <label>Bölge (Bursa)</label>
+
+      <div class="field">
+        <label>📍 Bursa'nın neresindesiniz?</label>
         <select id="region">
-          <option value="merkez" selected>Nilüfer / Osmangazi (merkez)</option>
-          <option value="çevre">Mudanya / Gemlik / İnegöl (çevre)</option>
+          <option value="merkez" selected>Nilüfer / Osmangazi (merkez ilçeler)</option>
+          <option value="cevre">Mudanya / Gemlik / İnegöl (çevre ilçeler)</option>
         </select>
+        <span class="hint">Merkezde rekabet daha yüksek, reklam maliyeti daha yüksektir.</span>
       </div>
-      <div>
-        <label>Sezon</label>
+
+      <div class="field">
+        <label>📅 Hangi sezon?</label>
         <select id="season">
           <option value="normal" selected>Normal sezon</option>
-          <option value="peak">Yüksek sezon (Q4 / düğün öncesi)</option>
+          <option value="peak">Yoğun sezon (Nisan–Temmuz / düğün öncesi / yılbaşı)</option>
         </select>
+        <span class="hint">Yoğun sezonda reklam fiyatları %20-40 artar [citation:7].</span>
       </div>
-      <div>
-        <label>Hedef Aylık Potansiyel Müşteri</label>
-        <input type="number" id="leads" value="30" min="5" max="500" />
+
+      <div class="field">
+        <label>🎯 Ayda kaç yeni müşteri istiyorsunuz?</label>
+        <input type="number" id="leads" value="20" min="5" max="300" />
+        <span class="hint">Gerçekçi bir hedef koyun: 1-5 çalışanlı bir salon için 15-30 yeni müşteri/ay iyi bir başlangıçtır [citation:7].</span>
       </div>
     </div>
   </div>
 
+  <!-- ========== KANAL ========== -->
   <div class="card">
-    <h2>2. Kanal Seçimi</h2>
-    <div class="grid">
-      <label class="checkbox-row">
+    <h2><span class="icon">📢</span> 2. Hangi Reklam Kanallarını Kullanacaksınız?</h2>
+    <div class="form-grid">
+      <label class="checkbox-row checked" id="cb-meta">
         <input type="checkbox" id="meta" checked />
-        <span>📱 Meta Ads (Instagram / Facebook)</span>
+        <div class="cb-text">
+          <span class="cb-title">📱 Meta Ads (Instagram + Facebook)</span>
+          <span class="cb-desc">Güzellik salonları için en etkili kanal. Öncesi-sonrası fotoğraflarıyla görsel reklam.</span>
+        </div>
       </label>
-      <label class="checkbox-row">
+      <label class="checkbox-row checked" id="cb-google">
         <input type="checkbox" id="google" checked />
-        <span>🔍 Google Ads (Arama)</span>
+        <div class="cb-text">
+          <span class="cb-title">🔍 Google Ads (Arama Ağı)</span>
+          <span class="cb-desc">"Bursa lazer epilasyon" gibi arama yapan müşteriyi yakalar. Mevzuat kısıtlı olabilir [citation:3].</span>
+        </div>
       </label>
     </div>
   </div>
 
+  <!-- ========== AJANS ========== -->
   <div class="card">
-    <h2>3. Ajans Modeli</h2>
-    <div class="grid">
-      <div>
-        <label>Yönetim Modeli</label>
+    <h2><span class="icon">🏢</span> 3. Ajans / Yönetim Modeli</h2>
+    <div class="form-grid">
+      <div class="field">
+        <label>Ajans Ücret Modeli</label>
         <select id="agencyModel">
           <option value="fixed" selected>Sabit Yönetim Ücreti</option>
           <option value="perf">Sabit + Performans Payı (%7)</option>
         </select>
+        <span class="hint">Bursa'daki yerel ajanslar genellikle 200-800 $ sabit ücret + satıştan %4-11 performans payı alır [citation:5][citation:13].</span>
       </div>
-      <div>
-        <label>Ortalama Hizmet Bedeli (TL / seans)</label>
+      <div class="field">
+        <label>💰 Ortalama hizmet bedeliniz (TL/seans)</label>
         <input type="number" id="ticket" value="800" min="100" step="50" />
+        <span class="hint">Bir müşterinin salonda ortalama ne kadar harcadığı. Ciro tahmini için kullanılır.</span>
       </div>
     </div>
   </div>
 
-  <button class="calc" onclick="calculate()">Ortalama Fiyatı Hesapla</button>
+  <!-- ========== BUTTON ========== -->
+  <button class="calc" onclick="calculate()">🔮 Ortalama Fiyatı Hesapla</button>
 
+  <!-- ========== RESULTS ========== -->
   <div class="results" id="results">
+
+    <!-- SUMMARY -->
     <div class="card">
-      <h2>📊 Özet Sonuçlar</h2>
+      <h2><span class="icon">📊</span> Aylık Bütçe Özeti</h2>
       <div class="kpi-grid" id="kpis"></div>
       <div class="scenario-tabs">
-        <button onclick="switchScenario('low',this)">Düşük senaryo</button>
-        <button onclick="switchScenario('avg',this)" class="active">Ortalama senaryo</button>
-        <button onclick="switchScenario('high',this)">Yüksek senaryo</button>
+        <button onclick="switchScenario('low',this)">💚 Düşük</button>
+        <button onclick="switchScenario('avg',this)" class="active">⭐ Ortalama</button>
+        <button onclick="switchScenario('high',this)">🔥 Yüksek</button>
       </div>
     </div>
 
+    <!-- BUDGET -->
     <div class="card">
-      <h2>💸 Bütçe Dağılımı</h2>
-      <table id="budgetTable"></table>
+      <h2><span class="icon">💸</span> Bütçe Nereye Gidiyor?</h2>
+      <div class="table-wrap">
+        <table id="budgetTable"></table>
+      </div>
     </div>
 
+    <!-- PERFORMANCE -->
     <div class="card">
-      <h2>📈 Tahmini Performans</h2>
-      <table id="perfTable"></table>
+      <h2><span class="icon">📈</span> Beklenen Sonuçlar</h2>
+      <div class="table-wrap">
+        <table id="perfTable"></table>
+      </div>
       <div class="note" id="note"></div>
+    </div>
+
+    <!-- GLOSSARY -->
+    <div class="glossary">
+      <h3>📚 Terimler Sözlüğü (Bilmeyenler için)</h3>
+      <dl>
+        <dt>CPL (Potansiyel Müşteri Başına Maliyet)</dt>
+        <dd>Bir kişi size ulaşıp "fiyat nedir?" diye sorana kadar harcadığınız para.</dd>
+        <dt>ROAS (Reklam Getirisi)</dt>
+        <dd>Harcadığınız 1 TL'nin kaç TL ciro getirdiği. 4x = 1 TL harcadınız, 4 TL kazandınız.</dd>
+        <dt>CPC (Tıklama Başına Maliyet)</dt>
+        <dd>Bir kişi reklamınıza tıkladığında ödediğiniz tutar [citation:7].</dd>
+        <dt>Lead (Potansiyel Müşteri)</dt>
+        <dd>Reklamı görüp sizinle iletişime geçen, henüz satın almamış kişi.</dd>
+      </dl>
     </div>
   </div>
 
+  <!-- ========== FOOTER ========== -->
   <footer>
-    Referans: Bursa güzellik sektörü Meta Ads CPM/CPL verileri • Google Ads tahmini (mevzuat kısıtı nedeniyle).
+    <p>📌 Referanslar: Bursa güzellik sektörü Meta Ads CPM/CPL verileri, Google Ads sektör ortalamaları [citation:5][citation:7][citation:8].</p>
+    <p style="margin-top:6px">⚠️ Bu bir tahmin aracıdır, kesin fiyat değildir. İlk 2 hafta <strong>1.500-2.000 TL test bütçesi</strong> ile gerçek verileri ölçmeniz önerilir.</p>
   </footer>
-
 </div>
+
+<button class="fab-top" id="fabTop" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 
 <script>
 /* ============================================================
-   REFERANS VERİLERİ (Bursa / Türkiye güzellik sektörü)
-   Değerler TL cinsindendir.
+   REFERANS VERİLERİ — Bursa / Türkiye güzellik sektörü 2026
+   Kaynak: Meta Ads Q1-Q2 2026 sektör benchmark'ları [citation:6],
+   Bursa ajans ücretleri [citation:5], Türkiye Instagram reklam CPL [citation:7]
    ============================================================ */
+
 const DATA = {
-  // CPL: potansiyel müşteri başına maliyet (düşük / orta / yüksek)
+  // --- CPL (Potansiyel Müşteri Başına Maliyet) ---
+  // Meta Ads: Beauty & Cosmetics sektörü CPL ≈ $28 (Q1-Q2 2026) [citation:6]
+  // Türkiye'de TL bazında: 80-250 TL bandı [citation:7]
   metaCPL: {
-    basic:  { low: 60,  avg: 100, high: 160 },
-    mid:    { low: 90,  avg: 140, high: 220 },
-    high:   { low: 130, avg: 200, high: 320 }
+    basic:  { low: 70,  avg: 110, high: 170 },
+    mid:    { low: 100, avg: 160, high: 250 },
+    high:   { low: 150, avg: 230, high: 360 }
   },
-  // Google Ads CPL (test bazlı, daha yüksek öngörülüyor)
+
+  // Google Ads: Lead Gen & Local Services CPL ≈ $42 (Q1-Q2 2026) [citation:6]
+  // Türkiye'de mevzuat kısıtı nedeniyle daha yüksek öngörülüyor
   googleCPL: {
-    basic:  { low: 90,  avg: 140, high: 220 },
-    mid:    { low: 120, avg: 190, high: 300 },
-    high:   { low: 180, avg: 270, high: 420 }
+    basic:  { low: 100, avg: 160, high: 250 },
+    mid:    { low: 140, avg: 220, high: 340 },
+    high:   { low: 200, avg: 320, high: 480 }
   },
-  // Bölge çarpanı
-  regionMultiplier: { merkez: 1.15, "çevre": 0.85 },
-  // Sezon çarpanı
-  seasonMultiplier: { normal: 1.0, peak: 1.22 },
-  // Ajans ücretleri
+
+  // --- Bölge Çarpanı ---
+  // Bursa merkez ilçelerde rekabet daha yüksek
+  regionMultiplier: { merkez: 1.10, cevre: 0.88 },
+
+  // --- Sezon Çarpanı ---
+  // Düğün sezonu ve Q4'te CPM %20-40 artıyor [citation:7]
+  seasonMultiplier: { normal: 1.0, peak: 1.30 },
+
+  // --- Ajans Ücretleri ---
+  // Bursa'daki yerel ajanslar: sabit 200-800 $ + %4-11 performans payı [citation:5][citation:13]
   agency: {
-    fixed:  { low: 200, avg: 350, high: 600 },        // USD/ay
-    perfRate: 0.07                                    // satıştan %7
+    fixedUSD: { low: 250, avg: 400, high: 650 },
+    perfRate: 0.07  // %7 performans payı (ortalama)
   },
-  // Kanal bütçe paylaşımı (her iki kanal seçiliyse)
-  split: { meta: 0.6, google: 0.4 }
+
+  // --- Kanal Bütçe Dağılımı ---
+  // Güzellik sektöründe Meta ağırlıklı çalışılır [citation:3]
+  split: { meta: 0.65, google: 0.35 }
 };
 
-const USD_TRY = 34; // yaklaşık kur — gerektiğinde güncelle
+// Güncel USD/TRY kuru (yaklaşık — gerektiğinde güncelleyin)
+const USD_TRY = 38;
 
 let lastResult = null;
 let currentScenario = 'avg';
 
 /* ============================================================
-   HESAPLAMA
+   HESAPLAMA FONKSİYONU
    ============================================================ */
 function calculate() {
+  // Girdileri oku
   const service = document.getElementById('service').value;
   const region  = document.getElementById('region').value;
   const season  = document.getElementById('season').value;
-  const leads   = Math.max(5, parseInt(document.getElementById('leads').value) || 30);
+  const leads   = Math.max(5, parseInt(document.getElementById('leads').value) || 20);
   const useMeta = document.getElementById('meta').checked;
   const useGoogle = document.getElementById('google').checked;
   const agencyModel = document.getElementById('agencyModel').value;
   const ticket = Math.max(100, parseInt(document.getElementById('ticket').value) || 800);
 
+  // Validasyon
   if (!useMeta && !useGoogle) {
-    alert('En az bir kanal seçmelisiniz.');
+    alert('⚠️ Lütfen en az bir reklam kanalı seçin.');
     return;
   }
 
+  // Çarpanlar
   const multipliers = DATA.regionMultiplier[region] * DATA.seasonMultiplier[season];
 
   // Her senaryo için hesapla
@@ -338,6 +585,7 @@ function calculate() {
     let metaCPL = 0, googleCPL = 0;
     let metaLeads = 0, googleLeads = 0;
 
+    // Lead dağılımı
     if (useMeta && useGoogle) {
       metaLeads = Math.round(leads * DATA.split.meta);
       googleLeads = leads - metaLeads;
@@ -362,8 +610,7 @@ function calculate() {
     const revenue = leads * ticket;
 
     // Ajans ücreti
-    let agencyUSD = DATA.agency.fixed[sc];
-    let agencyTRY = agencyUSD * USD_TRY;
+    let agencyTRY = DATA.agency.fixedUSD[sc] * USD_TRY;
     let perfFee = 0;
 
     if (agencyModel === 'perf') {
@@ -371,7 +618,7 @@ function calculate() {
     }
 
     const total = adSpend + agencyTRY + perfFee;
-    const roas = adSpend > 0 ? (revenue / adSpend).toFixed(2) : '0';
+    const roas = adSpend > 0 ? (revenue / adSpend).toFixed(2) : '0.00';
 
     scenarios[sc] = {
       metaLeads, googleLeads,
@@ -394,10 +641,11 @@ function calculate() {
   render();
   document.getElementById('results').classList.add('active');
   document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+  document.getElementById('fabTop').classList.add('show');
 }
 
 /* ============================================================
-   RENDER
+   RENDER — Sonuçları ekrana yaz
    ============================================================ */
 function switchScenario(sc, btn) {
   currentScenario = sc;
@@ -413,35 +661,35 @@ function render() {
 
   const fmt = n => n.toLocaleString('tr-TR') + ' ₺';
 
-  // KPI kartları
+  // --- KPI KARTLARI ---
   const kpis = [
     { label: 'Aylık Toplam Maliyet', value: fmt(s.total), sub: 'reklam + ajans' },
-    { label: 'Reklam Bütçesi', value: fmt(s.adSpend), sub: 'sadece medya' },
-    { label: 'Ortalama CPL', value: fmt(s.cplBlended), sub: 'potansiyel müşteri başına' },
-    { label: 'Tahmini Ciro', value: fmt(s.revenue), sub: `${leads} × ${fmt(ticket)}` },
+    { label: 'Reklam Bütçesi', value: fmt(s.adSpend), sub: 'sadece medya harcaması' },
+    { label: 'Ortalama CPL', value: fmt(s.cplBlended), sub: 'müşteri başına maliyet' },
+    { label: 'Tahmini Ciro', value: fmt(s.revenue), sub: leads + ' müşteri × ' + fmt(ticket) },
     { label: 'ROAS', value: s.roas + 'x', sub: 'reklam getirisi' }
   ];
 
   document.getElementById('kpis').innerHTML = kpis.map(k => `
     <div class="kpi">
-      <div class="label">${k.label}</div>
-      <div class="value">${k.value}</div>
-      <div class="sub">${k.sub}</div>
+      <div class="k-label">${k.label}</div>
+      <div class="k-value">${k.value}</div>
+      <div class="k-sub">${k.sub}</div>
     </div>
   `).join('');
 
-  // Bütçe tablosu
+  // --- BÜTÇE TABLOSU ---
   const rows = [];
   if (useMeta) {
     rows.push({
-      name: `📱 Meta Ads (${s.metaLeads} lead × ${fmt(s.metaCPL)})`,
+      name: `📱 Meta Ads (${s.metaLeads} müşteri × ${fmt(s.metaCPL)})`,
       val: s.metaBudget,
       pct: s.total
     });
   }
   if (useGoogle) {
     rows.push({
-      name: `🔍 Google Ads (${s.googleLeads} lead × ${fmt(s.googleCPL)})`,
+      name: `🔍 Google Ads (${s.googleLeads} müşteri × ${fmt(s.googleCPL)})`,
       val: s.googleBudget,
       pct: s.total
     });
@@ -455,63 +703,85 @@ function render() {
 
   document.getElementById('budgetTable').innerHTML = `
     <thead>
-      <tr><th>Kalem</th><th style="text-align:right">Tutar</th><th style="text-align:right">Pay</th></tr>
+      <tr><th>Harcama Kalemi</th><th style="text-align:right">Tutar</th><th style="text-align:right">Pay</th></tr>
     </thead>
     <tbody>
       ${rows.map(r => `
         <tr>
-          <td>${r.name}<div class="bar"><div style="width:${(r.val/r.pct*100).toFixed(1)}%"></div></div></td>
+          <td>
+            ${r.name}
+            <div class="bar"><div style="width:${(r.val/r.pct*100).toFixed(1)}%"></div></div>
+          </td>
           <td class="num">${fmt(r.val)}</td>
           <td class="num">${(r.val/r.pct*100).toFixed(1)}%</td>
         </tr>
       `).join('')}
       <tr class="total-row">
-        <td>TOPLAM</td>
+        <td>TOPLAM AYLIK MALİYET</td>
         <td class="num">${fmt(s.total)}</td>
         <td class="num">100%</td>
       </tr>
     </tbody>
   `;
 
-  // Performans tablosu
+  // --- PERFORMANS TABLOSU ---
+  const perfRows = [
+    ['Hedeflenen yeni müşteri', leads, ''],
+    ['Ortalama CPL (blended)', s.cplBlended, 'reklam maliyeti / müşteri'],
+    ['Müşteri başına toplam maliyet', Math.round(s.total / leads), 'reklam + ajans'],
+    ['Tahmini ciro', s.revenue, leads + ' × ' + fmt(ticket)],
+    ['ROAS (Reklam Getirisi)', s.roas + 'x', '1 TL harca → ' + s.roas + ' TL kazan']
+  ];
+
+  if (useMeta) perfRows.splice(2, 0, ['Meta Ads CPL', s.metaCPL, '']);
+  if (useGoogle) perfRows.splice(useMeta ? 3 : 2, 0, ['Google Ads CPL', s.googleCPL, 'tahmini']);
+
   document.getElementById('perfTable').innerHTML = `
     <thead>
-      <tr><th>Gösterge</th><th style="text-align:right">Değer</th></tr>
+      <tr><th>Gösterge</th><th style="text-align:right">Değer</th><th>Açıklama</th></tr>
     </thead>
     <tbody>
-      <tr><td>Hedef potansiyel müşteri</td><td class="num">${leads}</td></tr>
-      <tr><td>Ortalama CPL (blended)</td><td class="num">${fmt(s.cplBlended)}</td></tr>
-      ${useMeta ? `<tr><td>Meta CPL</td><td class="num">${fmt(s.metaCPL)}</td></tr>` : ''}
-      ${useGoogle ? `<tr><td>Google CPL (tahmini)</td><td class="num">${fmt(s.googleCPL)}</td></tr>` : ''}
-      <tr><td>Lead başına ajans maliyeti</td><td class="num">${fmt(Math.round(agencyTotal/leads))}</td></tr>
-      <tr><td>Lead başına toplam maliyet</td><td class="num">${fmt(Math.round(s.total/leads))}</td></tr>
-      <tr class="total-row"><td>Tahmini ciro</td><td class="num">${fmt(s.revenue)}</td></tr>
+      ${perfRows.map(r => `
+        <tr>
+          <td>${r[0]}</td>
+          <td class="num"><strong>${r[1]}</strong></td>
+          <td style="font-size:12px;color:#999">${r[2]}</td>
+        </tr>
+      `).join('')}
     </tbody>
   `;
 
-  // Not
+  // --- OTOMATİK NOT ---
   const roasNum = parseFloat(s.roas);
-  let noteClass = 'note';
-  let extra = '';
+  let advice = '';
 
   if (roasNum < 2) {
-    extra = '⚠️ ROAS 2x altında. Bütçe artırımı yerine hedefleme ve kreatif optimizasyonu önerilir.';
+    advice = '⚠️ <strong>Dikkat:</strong> ROAS 2x altında. Reklam harcaması ciroyu karşılamıyor olabilir. Hedeflemeyi daraltın (5-10 km çevre), görselleri iyileştirin [citation:7].';
   } else if (roasNum < 4) {
-    extra = '✅ ROAS sağlıklı bantta. Aşamalı ölçekleme (haftalık %20 artış) uygundur.';
+    advice = '✅ <strong>Sağlıklı bant:</strong> ROAS 2-4x arası. Reklamlar çalışıyor, aşamalı olarak bütçe artırılabilir (haftalık %10-20).';
   } else {
-    extra = '🚀 ROAS güçlü. Bütçe artırımı ve lookalike kitle genişletmesi düşünülebilir.';
+    advice = '🚀 <strong>Güçlü performans:</strong> ROAS 4x üzeri. Bütçeyi artırın ve benzer kitlelere (lookalike) genişletin.';
   }
 
   document.getElementById('note').innerHTML = `
-    ${extra}<br><br>
-    <strong>Not:</strong> Google Ads tarafında "estetik" ve "güzellik" kelimeleri mevzuat
-    nedeniyle kısıtlı olabilir. İlk 2 hafta <strong>test bütçesi (1.500–2.000 ₺)</strong>
-    ayırıp gerçek CPC/CPL verisini ölçmeniz önerilir.<br>
-    Kur varsayımı: 1 USD = ${USD_TRY} ₺.
+    ${advice}<br><br>
+    <strong>💡 Önemli Not:</strong> Google Ads tarafında "estetik" ve "güzellik" anahtar kelimeleri mevzuat nedeniyle kısıtlı olabilir [citation:3]. İlk 2 hafta <strong>1.500–2.000 TL test bütçesi</strong> ayırıp gerçek CPC/CPL verisini ölçmeniz önerilir. Fatura tahmininde USD/TRY = ${USD_TRY} kullanılmıştır.
   `;
 }
 
-/* İlk yüklemede gizli kalsın */
+/* ============================================================
+   CHECKBOX GÖRSEL GERİ BİLDİRİM
+   ============================================================ */
+document.querySelectorAll('.checkbox-row').forEach(row => {
+  const cb = row.querySelector('input[type="checkbox"]');
+  const update = () => row.classList.toggle('checked', cb.checked);
+  cb.addEventListener('change', update);
+  update();
+});
+
+/* ============================================================
+   İLK YÜKLEME
+   ============================================================ */
 document.getElementById('results').classList.remove('active');
 </script>
 </body>
