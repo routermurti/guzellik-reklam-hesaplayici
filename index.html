@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Güzellik Salonu Reklam Fiyatlandırma Aracı | Bursa</title>
+<style>
+  :root{
+    --bg:#0f1220;
+    --card:#171a2e;
+    --card2:#1e2240;
+    --accent:#e91e63;
+    --accent2:#ff6b9d;
+    --text:#eef0ff;
+    --muted:#9aa0c0;
+    --border:#2a2f55;
+    --green:#22c55e;
+    --yellow:#eab308;
+    --red:#ef4444;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+    background:linear-gradient(180deg,#0f1220 0%,#151833 100%);
+    color:var(--text);
+    min-height:100vh;
+    padding:24px 16px 60px;
+  }
+  .container{max-width:960px;margin:0 auto}
+  header{text-align:center;margin-bottom:32px}
+  header h1{
+    font-size:clamp(22px,4vw,32px);
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    -webkit-background-clip:text;
+    background-clip:text;
+    -webkit-text-fill-color:transparent;
+    margin-bottom:8px;
+  }
+  header p{color:var(--muted);font-size:14px}
+  .card{
+    background:var(--card);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:24px;
+    margin-bottom:20px;
+  }
+  .card h2{
+    font-size:16px;
+    margin-bottom:16px;
+    color:var(--accent2);
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+  }
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:640px){.grid{grid-template-columns:1fr}}
+  label{display:block;font-size:13px;color:var(--muted);margin-bottom:6px}
+  select,input[type=number]{
+    width:100%;
+    padding:12px 14px;
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    color:var(--text);
+    font-size:14px;
+    outline:none;
+    transition:border-color .2s;
+  }
+  select:focus,input:focus{border-color:var(--accent)}
+  .checkbox-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:12px 14px;
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:10px;
+    cursor:pointer;
+    user-select:none;
+    transition:border-color .2s;
+  }
+  .checkbox-row:hover{border-color:var(--accent)}
+  .checkbox-row input{width:18px;height:18px;accent-color:var(--accent)}
+  .checkbox-row span{font-size:14px}
+  button.calc{
+    width:100%;
+    padding:16px;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    border:none;
+    border-radius:12px;
+    color:#fff;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+    margin-top:8px;
+    transition:transform .15s,opacity .15s;
+  }
+  button.calc:hover{transform:translateY(-2px);opacity:.95}
+  button.calc:active{transform:translateY(0)}
+  .results{display:none;margin-top:8px}
+  .results.active{display:block;animation:fadeIn .4s ease}
+  @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+  .kpi-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+    gap:14px;
+    margin-bottom:20px;
+  }
+  .kpi{
+    background:var(--card2);
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:18px;
+    text-align:center;
+  }
+  .kpi .label{font-size:12px;color:var(--muted);margin-bottom:8px;text-transform:uppercase;letter-spacing:.4px}
+  .kpi .value{font-size:22px;font-weight:700;color:var(--accent2)}
+  .kpi .sub{font-size:11px;color:var(--muted);margin-top:4px}
+  table{width:100%;border-collapse:collapse;font-size:14px}
+  th,td{padding:12px;text-align:left;border-bottom:1px solid var(--border)}
+  th{color:var(--muted);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.4px}
+  td.num{text-align:right;font-variant-numeric:tabular-nums}
+  .total-row td{font-weight:700;color:var(--accent2);border-bottom:none;font-size:15px}
+  .bar{
+    height:8px;
+    background:var(--card2);
+    border-radius:4px;
+    overflow:hidden;
+    margin-top:6px;
+  }
+  .bar > div{
+    height:100%;
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    border-radius:4px;
+    transition:width .6s ease;
+  }
+  .note{
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.6;
+    margin-top:12px;
+    padding:12px;
+    background:rgba(233,30,99,.06);
+    border-left:3px solid var(--accent);
+    border-radius:6px;
+  }
+  footer{
+    text-align:center;
+    font-size:12px;
+    color:var(--muted);
+    margin-top:32px;
+  }
+  .scenario-tabs{
+    display:flex;
+    gap:8px;
+    margin-bottom:20px;
+    flex-wrap:wrap;
+  }
+  .scenario-tabs button{
+    flex:1;
+    min-width:120px;
+    padding:10px;
+    background:var(--card2);
+    border:1px solid var(--border);
+    color:var(--muted);
+    border-radius:10px;
+    cursor:pointer;
+    font-size:13px;
+    transition:all .2s;
+  }
+  .scenario-tabs button.active{
+    background:linear-gradient(90deg,var(--accent),var(--accent2));
+    color:#fff;
+    border-color:transparent;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>💅 Güzellik Salonu Reklam Fiyatlandırma Aracı</h1>
+    <p>Bursa • Google Ads + Meta Ads • Ortalama bütçe ve CPL tahmini</p>
+  </header>
+
+  <div class="card">
+    <h2>1. Salon Bilgileri</h2>
+    <div class="grid">
+      <div>
+        <label>Hizmet Türü</label>
+        <select id="service">
+          <option value="basic">Saç / Bakım (düşük bilet)</option>
+          <option value="mid" selected>Cilt bakımı / Lazer / Bölgesel</option>
+          <option value="high">Gelin paketi / Medikal estetik</option>
+        </select>
+      </div>
+      <div>
+        <label>Bölge (Bursa)</label>
+        <select id="region">
+          <option value="merkez" selected>Nilüfer / Osmangazi (merkez)</option>
+          <option value="çevre">Mudanya / Gemlik / İnegöl (çevre)</option>
+        </select>
+      </div>
+      <div>
+        <label>Sezon</label>
+        <select id="season">
+          <option value="normal" selected>Normal sezon</option>
+          <option value="peak">Yüksek sezon (Q4 / düğün öncesi)</option>
+        </select>
+      </div>
+      <div>
+        <label>Hedef Aylık Potansiyel Müşteri</label>
+        <input type="number" id="leads" value="30" min="5" max="500" />
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>2. Kanal Seçimi</h2>
+    <div class="grid">
+      <label class="checkbox-row">
+        <input type="checkbox" id="meta" checked />
+        <span>📱 Meta Ads (Instagram / Facebook)</span>
+      </label>
+      <label class="checkbox-row">
+        <input type="checkbox" id="google" checked />
+        <span>🔍 Google Ads (Arama)</span>
+      </label>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>3. Ajans Modeli</h2>
+    <div class="grid">
+      <div>
+        <label>Yönetim Modeli</label>
+        <select id="agencyModel">
+          <option value="fixed" selected>Sabit Yönetim Ücreti</option>
+          <option value="perf">Sabit + Performans Payı (%7)</option>
+        </select>
+      </div>
+      <div>
+        <label>Ortalama Hizmet Bedeli (TL / seans)</label>
+        <input type="number" id="ticket" value="800" min="100" step="50" />
+      </div>
+    </div>
+  </div>
+
+  <button class="calc" onclick="calculate()">Ortalama Fiyatı Hesapla</button>
+
+  <div class="results" id="results">
+    <div class="card">
+      <h2>📊 Özet Sonuçlar</h2>
+      <div class="kpi-grid" id="kpis"></div>
+      <div class="scenario-tabs">
+        <button onclick="switchScenario('low',this)">Düşük senaryo</button>
+        <button onclick="switchScenario('avg',this)" class="active">Ortalama senaryo</button>
+        <button onclick="switchScenario('high',this)">Yüksek senaryo</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>💸 Bütçe Dağılımı</h2>
+      <table id="budgetTable"></table>
+    </div>
+
+    <div class="card">
+      <h2>📈 Tahmini Performans</h2>
+      <table id="perfTable"></table>
+      <div class="note" id="note"></div>
+    </div>
+  </div>
+
+  <footer>
+    Referans: Bursa güzellik sektörü Meta Ads CPM/CPL verileri • Google Ads tahmini (mevzuat kısıtı nedeniyle).
+  </footer>
+
+</div>
+
+<script>
+/* ============================================================
+   REFERANS VERİLERİ (Bursa / Türkiye güzellik sektörü)
+   Değerler TL cinsindendir.
+   ============================================================ */
+const DATA = {
+  // CPL: potansiyel müşteri başına maliyet (düşük / orta / yüksek)
+  metaCPL: {
+    basic:  { low: 60,  avg: 100, high: 160 },
+    mid:    { low: 90,  avg: 140, high: 220 },
+    high:   { low: 130, avg: 200, high: 320 }
+  },
+  // Google Ads CPL (test bazlı, daha yüksek öngörülüyor)
+  googleCPL: {
+    basic:  { low: 90,  avg: 140, high: 220 },
+    mid:    { low: 120, avg: 190, high: 300 },
+    high:   { low: 180, avg: 270, high: 420 }
+  },
+  // Bölge çarpanı
+  regionMultiplier: { merkez: 1.15, "çevre": 0.85 },
+  // Sezon çarpanı
+  seasonMultiplier: { normal: 1.0, peak: 1.22 },
+  // Ajans ücretleri
+  agency: {
+    fixed:  { low: 200, avg: 350, high: 600 },        // USD/ay
+    perfRate: 0.07                                    // satıştan %7
+  },
+  // Kanal bütçe paylaşımı (her iki kanal seçiliyse)
+  split: { meta: 0.6, google: 0.4 }
+};
+
+const USD_TRY = 34; // yaklaşık kur — gerektiğinde güncelle
+
+let lastResult = null;
+let currentScenario = 'avg';
+
+/* ============================================================
+   HESAPLAMA
+   ============================================================ */
+function calculate() {
+  const service = document.getElementById('service').value;
+  const region  = document.getElementById('region').value;
+  const season  = document.getElementById('season').value;
+  const leads   = Math.max(5, parseInt(document.getElementById('leads').value) || 30);
+  const useMeta = document.getElementById('meta').checked;
+  const useGoogle = document.getElementById('google').checked;
+  const agencyModel = document.getElementById('agencyModel').value;
+  const ticket = Math.max(100, parseInt(document.getElementById('ticket').value) || 800);
+
+  if (!useMeta && !useGoogle) {
+    alert('En az bir kanal seçmelisiniz.');
+    return;
+  }
+
+  const multipliers = DATA.regionMultiplier[region] * DATA.seasonMultiplier[season];
+
+  // Her senaryo için hesapla
+  const scenarios = {};
+  ['low','avg','high'].forEach(sc => {
+    let metaCPL = 0, googleCPL = 0;
+    let metaLeads = 0, googleLeads = 0;
+
+    if (useMeta && useGoogle) {
+      metaLeads = Math.round(leads * DATA.split.meta);
+      googleLeads = leads - metaLeads;
+    } else if (useMeta) {
+      metaLeads = leads;
+    } else {
+      googleLeads = leads;
+    }
+
+    let metaBudget = 0, googleBudget = 0;
+
+    if (useMeta) {
+      metaCPL = DATA.metaCPL[service][sc] * multipliers;
+      metaBudget = metaCPL * metaLeads;
+    }
+    if (useGoogle) {
+      googleCPL = DATA.googleCPL[service][sc] * multipliers;
+      googleBudget = googleCPL * googleLeads;
+    }
+
+    const adSpend = metaBudget + googleBudget;
+    const revenue = leads * ticket;
+
+    // Ajans ücreti
+    let agencyUSD = DATA.agency.fixed[sc];
+    let agencyTRY = agencyUSD * USD_TRY;
+    let perfFee = 0;
+
+    if (agencyModel === 'perf') {
+      perfFee = revenue * DATA.agency.perfRate;
+    }
+
+    const total = adSpend + agencyTRY + perfFee;
+    const roas = adSpend > 0 ? (revenue / adSpend).toFixed(2) : '0';
+
+    scenarios[sc] = {
+      metaLeads, googleLeads,
+      metaCPL: Math.round(metaCPL),
+      googleCPL: Math.round(googleCPL),
+      metaBudget: Math.round(metaBudget),
+      googleBudget: Math.round(googleBudget),
+      adSpend: Math.round(adSpend),
+      agencyTRY: Math.round(agencyTRY),
+      perfFee: Math.round(perfFee),
+      total: Math.round(total),
+      revenue: Math.round(revenue),
+      roas,
+      cplBlended: leads > 0 ? Math.round(adSpend / leads) : 0
+    };
+  });
+
+  lastResult = { scenarios, leads, ticket, useMeta, useGoogle, agencyModel, service, region, season };
+  currentScenario = 'avg';
+  render();
+  document.getElementById('results').classList.add('active');
+  document.getElementById('results').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+/* ============================================================
+   RENDER
+   ============================================================ */
+function switchScenario(sc, btn) {
+  currentScenario = sc;
+  document.querySelectorAll('.scenario-tabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  render();
+}
+
+function render() {
+  if (!lastResult) return;
+  const s = lastResult.scenarios[currentScenario];
+  const { leads, ticket, useMeta, useGoogle, agencyModel } = lastResult;
+
+  const fmt = n => n.toLocaleString('tr-TR') + ' ₺';
+
+  // KPI kartları
+  const kpis = [
+    { label: 'Aylık Toplam Maliyet', value: fmt(s.total), sub: 'reklam + ajans' },
+    { label: 'Reklam Bütçesi', value: fmt(s.adSpend), sub: 'sadece medya' },
+    { label: 'Ortalama CPL', value: fmt(s.cplBlended), sub: 'potansiyel müşteri başına' },
+    { label: 'Tahmini Ciro', value: fmt(s.revenue), sub: `${leads} × ${fmt(ticket)}` },
+    { label: 'ROAS', value: s.roas + 'x', sub: 'reklam getirisi' }
+  ];
+
+  document.getElementById('kpis').innerHTML = kpis.map(k => `
+    <div class="kpi">
+      <div class="label">${k.label}</div>
+      <div class="value">${k.value}</div>
+      <div class="sub">${k.sub}</div>
+    </div>
+  `).join('');
+
+  // Bütçe tablosu
+  const rows = [];
+  if (useMeta) {
+    rows.push({
+      name: `📱 Meta Ads (${s.metaLeads} lead × ${fmt(s.metaCPL)})`,
+      val: s.metaBudget,
+      pct: s.total
+    });
+  }
+  if (useGoogle) {
+    rows.push({
+      name: `🔍 Google Ads (${s.googleLeads} lead × ${fmt(s.googleCPL)})`,
+      val: s.googleBudget,
+      pct: s.total
+    });
+  }
+  const agencyTotal = s.agencyTRY + s.perfFee;
+  rows.push({
+    name: `🏢 Ajans Ücreti (${agencyModel === 'perf' ? 'sabit + %7 performans' : 'sabit'})`,
+    val: agencyTotal,
+    pct: s.total
+  });
+
+  document.getElementById('budgetTable').innerHTML = `
+    <thead>
+      <tr><th>Kalem</th><th style="text-align:right">Tutar</th><th style="text-align:right">Pay</th></tr>
+    </thead>
+    <tbody>
+      ${rows.map(r => `
+        <tr>
+          <td>${r.name}<div class="bar"><div style="width:${(r.val/r.pct*100).toFixed(1)}%"></div></div></td>
+          <td class="num">${fmt(r.val)}</td>
+          <td class="num">${(r.val/r.pct*100).toFixed(1)}%</td>
+        </tr>
+      `).join('')}
+      <tr class="total-row">
+        <td>TOPLAM</td>
+        <td class="num">${fmt(s.total)}</td>
+        <td class="num">100%</td>
+      </tr>
+    </tbody>
+  `;
+
+  // Performans tablosu
+  document.getElementById('perfTable').innerHTML = `
+    <thead>
+      <tr><th>Gösterge</th><th style="text-align:right">Değer</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Hedef potansiyel müşteri</td><td class="num">${leads}</td></tr>
+      <tr><td>Ortalama CPL (blended)</td><td class="num">${fmt(s.cplBlended)}</td></tr>
+      ${useMeta ? `<tr><td>Meta CPL</td><td class="num">${fmt(s.metaCPL)}</td></tr>` : ''}
+      ${useGoogle ? `<tr><td>Google CPL (tahmini)</td><td class="num">${fmt(s.googleCPL)}</td></tr>` : ''}
+      <tr><td>Lead başına ajans maliyeti</td><td class="num">${fmt(Math.round(agencyTotal/leads))}</td></tr>
+      <tr><td>Lead başına toplam maliyet</td><td class="num">${fmt(Math.round(s.total/leads))}</td></tr>
+      <tr class="total-row"><td>Tahmini ciro</td><td class="num">${fmt(s.revenue)}</td></tr>
+    </tbody>
+  `;
+
+  // Not
+  const roasNum = parseFloat(s.roas);
+  let noteClass = 'note';
+  let extra = '';
+
+  if (roasNum < 2) {
+    extra = '⚠️ ROAS 2x altında. Bütçe artırımı yerine hedefleme ve kreatif optimizasyonu önerilir.';
+  } else if (roasNum < 4) {
+    extra = '✅ ROAS sağlıklı bantta. Aşamalı ölçekleme (haftalık %20 artış) uygundur.';
+  } else {
+    extra = '🚀 ROAS güçlü. Bütçe artırımı ve lookalike kitle genişletmesi düşünülebilir.';
+  }
+
+  document.getElementById('note').innerHTML = `
+    ${extra}<br><br>
+    <strong>Not:</strong> Google Ads tarafında "estetik" ve "güzellik" kelimeleri mevzuat
+    nedeniyle kısıtlı olabilir. İlk 2 hafta <strong>test bütçesi (1.500–2.000 ₺)</strong>
+    ayırıp gerçek CPC/CPL verisini ölçmeniz önerilir.<br>
+    Kur varsayımı: 1 USD = ${USD_TRY} ₺.
+  `;
+}
+
+/* İlk yüklemede gizli kalsın */
+document.getElementById('results').classList.remove('active');
+</script>
+</body>
+</html>
